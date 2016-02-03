@@ -126,6 +126,12 @@ with open("/home/soumya/research/insight/insight_project/modeling/code/dsm_exog_
     for line in lines:
         variables.append(line.strip().upper())
 
+def check_discrete(data,thevariable):
+    if len(data[thevariable].unique())>19 or "AGE_OF" in thevariable or "AGE_AS" in thevariable or "#" in thevariable:
+        return "continuous"
+    else:
+        return "categorical"
+
 
 continuous=[term for term in variables if check_discrete(data,term)=="continuous"]
 categorical=[term for term in variables if check_discrete(data,term)=="categorical"]
@@ -361,12 +367,6 @@ def interpret_vectorized(data,feature):
     else:
         return data[feature].map(lambda x: "inapplicable" if x<0 else x)
 
-
-def check_discrete(data,thevariable):
-    if len(data[thevariable].unique())>19 or "AGE_OF" in thevariable or "AGE_AS" in thevariable or "#" in thevariable:
-        return "continuous"
-    else:
-        return "categorical"
 
     temp=interpret_vectorized(data,thevar)
     w=data["FINAL_PERSON_WEIGHT_2013"]
